@@ -1,0 +1,140 @@
+{
+    "env": {
+      "commonjs": true,
+      "es2021": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:security/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:promise/recommended",
+      "plugin:json/recommended",
+      "plugin:node/recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": [
+      "import",
+      "security",
+      "@typescript-eslint"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "project": "./tsconfig.json",
+      "extraFileExtensions": [".graphql"] // Remove if not used
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [".ts", ".tsx"]
+        }
+      }
+    },
+    "rules": {
+      "@typescript-eslint/member-delimiter-style": [
+        "error",
+        {
+          "multiline": {
+            "delimiter": "semi",
+            "requireLast": true
+          },
+          "singleline": {
+            "delimiter": "semi",
+            "requireLast": false
+          }
+        }
+      ],
+      "import/extensions": ["error", "ignorePackages", { "ts": "never" }],
+      "quotes": [
+        "warn",
+        "single"
+      ],
+      "semi": "error",
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "no-multiple-empty-lines": [
+        2,
+        {
+          "max": 1
+        }
+      ],
+      "arrow-parens": [
+        "error",
+        "as-needed"
+      ],
+      "indent": [
+        "error",
+        2
+      ],
+      "no-param-reassign": "warn",
+      "camelcase": [
+        "error",
+        {
+          "properties": "always"
+        }
+      ],
+      "import/order": [
+        "error",
+        {
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": false
+          },
+          "newlines-between": "always-and-inside-groups"
+        }
+      ],
+      "default-param-last": [
+        "error"
+      ],
+      "max-lines": [
+        "error",
+        {
+        //   "max": 150,
+          "skipComments": true,
+          "skipBlankLines": true
+        }
+      ],
+      "max-len": [
+        "error",
+        {
+        //   "code": 150,
+          "ignoreComments": true,
+          "ignoreTemplateLiterals": true
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.ts"
+        ],
+        "extends": [
+          "plugin:eslint-plugin/rules-recommended"
+        ]
+      },
+      {
+        "files": [ "**/*.ts", "**/*.tsx"],
+        "rules": {
+          "node/no-unsupported-features/es-syntax": "off",
+          "import/extensions": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.ts",
+          "**/*.tsx"
+        ],
+        "rules": {
+          "node/no-unsupported-features/es-syntax": "off",
+          "import/extensions": "off",
+          "import/no-unresolved": "off",
+          "node/no-missing-import": "off"
+        }
+      }
+    ]
+  }
+  

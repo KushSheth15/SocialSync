@@ -1,0 +1,61 @@
+/* eslint-disable max-len */
+import Sequelize, {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize';
+
+import db from '../sequelize-client';
+
+export interface PostModelCreationAttributes {
+    content: string;
+    userId: string;
+}
+
+export interface PostModelAttributes extends PostModelCreationAttributes {
+    id: string;
+}
+
+export default class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
+  declare id: CreationOptional<string>;
+  declare content: string;
+  declare userId: string;
+
+  static associate: (models: typeof db) => void;
+}
+
+export const post = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequelize.DataTypes) => {
+  Post.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
+      content: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'user_id',
+      },
+    },
+    {
+      sequelize,
+      underscored: true,
+      timestamps: true,
+      paranoid: true,
+      modelName: 'Post',
+      tableName: 'posts',
+    },
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  Post.associate = models => {};
+
+  return Post;
+};
