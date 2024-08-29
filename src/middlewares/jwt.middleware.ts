@@ -1,23 +1,19 @@
 /* eslint-disable security/detect-possible-timing-attacks */
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 import config from '../config/config';
 // import {
 //   ERROR_MESSAGES,
 // } from '../constants/messages.constant';
-import User from '../models/user.model';
+// import User from '../models/user.model';
 import db from '../sequelize-client';
+import { MyUserRequest } from '../types/request-interface';
 import ApiError from '../utils/api-error';
 import asyncHandler from '../utils/async-handler';
 import encryption from '../utils/encryption';
-
-interface MyUserRequest extends Request {
-    token?: string;
-    user?: User;
-}
 
 export const verifyToken = asyncHandler(
   async (req: MyUserRequest, res: Response, next: NextFunction) => {

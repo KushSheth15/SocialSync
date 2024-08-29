@@ -1,0 +1,14 @@
+{
+	"MISSING_REQUIRED_FIELDS": "All Fields Required",
+	"EMAIL_ALREADY_EXIST": "Email or Username already exists",
+	"INTERNAL_SERVER_ERROR": "Internal Server Error",
+	"ACCOUNT_CREATED_SUCCESSFULLY": "Account Created Sucessfully. Please Login",
+    "USER_NOT_FOUND":"User Not Found",
+    "INVALID_CREDENTIAL":"Invalid Credentials",
+    "LOGIN_SUCCESSFULLY":"Login Successfully",
+    "FILE_REQUIRED":"File is required",
+    "PROFILE_UPLOAD_FAILED":"Failed to upload profile",
+    "PROFILE_UPDATED_SUCCESSFULLY":"Profile updated successfully",
+    "INVALID_PROFILE_VISIBILITY":"Invalid profile visibility value",
+    "UPDATE_USER_FAILED":"User update failed"
+}

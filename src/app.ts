@@ -3,6 +3,7 @@
 import * as dotenv from 'dotenv';
 import express from 'express';
 
+import localizationMiddleware from './middlewares/localization';
 import router from './routes/index.routes';
 
 dotenv.config();
@@ -12,6 +13,8 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/v1',router);
+
+app.use(localizationMiddleware);
 
 app.use((err: any, req: any, res: any, next: any) => {
   if (err.statusCode) {

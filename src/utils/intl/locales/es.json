@@ -1,0 +1,6 @@
+{
+    "MISSING_REQUIRED_FIELDS": "Todos los campos son obligatorios",
+    "EMAIL_ALREADY_EXIST": "El correo electrónico o nombre de usuario ya existe",
+    "ACCOUNT_CREATED_PLEASE_LOGIN": "¡Cuenta creada con éxito, por favor inicie sesión!",
+    "INTERNAL_SERVER_ERROR": "Error interno del servidor"
+}
