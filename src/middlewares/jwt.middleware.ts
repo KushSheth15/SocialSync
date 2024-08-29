@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-possible-timing-attacks */
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { Response, NextFunction } from 'express';
+import {Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 import config from '../config/config';

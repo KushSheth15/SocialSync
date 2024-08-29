@@ -22,6 +22,8 @@ export default class Post extends Model<InferAttributes<Post>, InferCreationAttr
   declare content: string;
   declare userId: string;
 
+  declare comments?:Comment[];
+
   static associate: (models: typeof db) => void;
 }
 
@@ -55,7 +57,9 @@ export const post = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequelize
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Post.associate = models => {};
+  Post.associate = models => {
+    Post.hasMany(models.Comment,{foreignKey:'postId',as:'comments'});
+  };
 
   return Post;
 };
