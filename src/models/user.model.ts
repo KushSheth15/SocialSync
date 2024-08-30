@@ -33,7 +33,7 @@ export default class User extends Model<InferAttributes<User>, InferCreationAttr
   static associate: (models: typeof db) => void;
 
   static async hashPassword(user: User) {
-    if (user.password) {
+    if (user.changed('password')) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(user.password, salt);
     }

@@ -7,9 +7,12 @@ import { accessToken } from './models/access-token.model';
 import { comment } from './models/comment.model';
 import config from './models/config';
 import { friendship } from './models/friendhip.model';
+import { like } from './models/like.model';
 import { notification } from './models/notification.model';
 import { post } from './models/post.model';
 import { setting } from './models/setting.model';
+import { sharepost } from './models/share-post.model';
+import { usertag } from './models/user-tag.model';
 import { user } from './models/user.model';
 
 const env = process.env.NODE_ENV || 'development';
@@ -38,6 +41,9 @@ const db = {
   Friendship: friendship(sequelize, DataTypes),
   Notification: notification(sequelize, DataTypes),
   Setting: setting(sequelize, DataTypes),
+  Like:like(sequelize,DataTypes),
+  SharePost:sharepost(sequelize,DataTypes),
+  UserTag:usertag(sequelize,DataTypes),
   models: sequelize.models,
 };
 

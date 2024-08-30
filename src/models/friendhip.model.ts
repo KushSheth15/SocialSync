@@ -8,6 +8,8 @@ import Sequelize, {
 
 import db from '../sequelize-client';
 
+import User from './user.model';
+
 export interface FriendshipModelCreationAttributes {
     requesterId: string;
     receiverId: string;
@@ -26,6 +28,9 @@ export default class Friendship extends Model<
   declare status: CreationOptional<'PENDING' | 'ACCEPTED' | 'REJECTED'>;
   declare requesterId: string;
   declare receiverId: string;
+
+  declare requester?: User;
+  declare receiver?: User;
 
   static associate: (models: typeof db) => void;
 }
@@ -67,7 +72,11 @@ export const friendship = (
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Friendship.associate = models => {};
+  Friendship.associate = models => {
+    Friendship.belongsTo(models.User,{foreignKey:'requesterId',as:'requester'});
+
+    Friendship.belongsTo(models.User,{foreignKey:'receiverId',as:'receiver'});
+  };
 
   return Friendship;
 };

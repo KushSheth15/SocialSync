@@ -63,7 +63,10 @@ export const loginUser = asyncHandler(async (req: Request, res: Response, next: 
       return next(new ApiError(404, localeService.translate('USER_NOT_FOUND')));
     }
 
+    console.log('Original Password',password);
+    console.log('User Password',user.password);
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(isMatch);
     if (!isMatch) {
       return next(new ApiError(401, localeService.translate('INVALID_CREDENTIAL')));
     }

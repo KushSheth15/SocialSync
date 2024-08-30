@@ -21,5 +21,8 @@
 	"COMMENT_UPDATED_SUCCESSFULLY": "Comment updated successfully",
 	"COMMENT_ADDED_SUCCESSFULLY": "Comment Added Successfully",
 	"COMMENT_DELETED_SUCCESSFULLY": "Comment Deleted Successfully",
-	"COMMENT_NOT_FOUND": "Comment Not Found"
+	"COMMENT_NOT_FOUND": "Comment Not Found",
+	"FRIEND_REQUEST_ALREADY_EXISTS":"They are already friends :)",
+	"FRIEND_REQUEST_SENT_SUCCESSFULLY":"Friend Request has been sent successfully",
+	"FRIENDS_FETCHED_SUCCESSFULLY":"Friends Fetched Successfully"
 }
