@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import {USER_ROUTES} from '../constants/api.constant';
 import {
   registerUser,
   loginUser,
@@ -13,23 +14,23 @@ import validate from '../middlewares/validate.middleware';
 import {registerSchema,loginSchema} from '../validators/user.validators';
 const router = Router();
 
-router.post('/register',validate(registerSchema),registerUser);
+router.post(USER_ROUTES.REGISTER,validate(registerSchema),registerUser);
 
-router.post('/login',validate(loginSchema),loginUser);
+router.post(USER_ROUTES.LOGIN,validate(loginSchema),loginUser);
 
-router.post('/upload-profile',
+router.post(USER_ROUTES.UPLOAD_PROFILE,
   verifyToken,
   upload.single('profileImage'),
   uploadProfile
 );
 
-router.patch('/update-profile',
+router.patch(USER_ROUTES.UPDATE_PROFILE,
   verifyToken,
   upload.single('profileImage'),
   updateProfile
 );
 
-router.get('/get-profile/:id',
+router.get(USER_ROUTES.GET_PROFILE,
   verifyToken,
   getUserProfile
 );

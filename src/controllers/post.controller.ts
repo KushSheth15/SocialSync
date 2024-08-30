@@ -6,6 +6,7 @@ import { MyUserRequest } from '../types/request-interface';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
+import uploadOnCloudinary from '../utils/cloudinary';
 import { isFriend } from '../utils/friendship.utils';
 import i18n from '../utils/intl/i18n-config';
 import { LocaleService } from '../utils/intl/locale-service';
@@ -14,7 +15,8 @@ import redisClient from '../utils/redis-client';
 const localeService = new LocaleService(i18n);
 
 export const createPost = asyncHandler(async (req: MyUserRequest, res: Response, next: NextFunction) => {
-  const { content } = req.body;
+  const content = req.file?.path;
+  const {captions} = req.body;
   const user = req.user;
 
   if (!user) {
@@ -26,8 +28,19 @@ export const createPost = asyncHandler(async (req: MyUserRequest, res: Response,
   try {
     await redisClient.del('allPosts');
 
+    // Upload profile image if it exists
+    let mediaUrl: string | undefined;
+    if (content) {
+      const postContent = await uploadOnCloudinary(content);
+      if (!postContent || !postContent.url) {
+        return next(new ApiError(400, localeService.translate('CONTENT_UPLOAD_FAILED')));
+      }
+      mediaUrl = postContent.url;
+    }
+
     const newPost = await db.Post.create({
-      content,
+      content:mediaUrl as string,
+      captions,
       userId: user.id,
     });
 
