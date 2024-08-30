@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-import */
 /* eslint-disable security/detect-possible-timing-attacks */
 import * as dotenv from 'dotenv';
 dotenv.config();

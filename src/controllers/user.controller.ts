@@ -13,6 +13,7 @@ import encryption from '../utils/encryption';
 import i18n from '../utils/intl/i18n-config';
 import { LocaleService } from '../utils/intl/locale-service';
 import { generateAccessToken, generateRefreshToken } from '../utils/jwt-tokens';
+import redisClient from '../utils/redis-client';
 
 const localeService = new LocaleService(i18n);
 
@@ -63,10 +64,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response, next: 
       return next(new ApiError(404, localeService.translate('USER_NOT_FOUND')));
     }
 
-    console.log('Original Password',password);
-    console.log('User Password',user.password);
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log(isMatch);
     if (!isMatch) {
       return next(new ApiError(401, localeService.translate('INVALID_CREDENTIAL')));
     }
@@ -124,6 +122,9 @@ export const loginUser = asyncHandler(async (req: Request, res: Response, next: 
       refreshToken = encryption.decryptWithAES(refreshTokenRecord.token);
     }
 
+    // Cache using Redis
+    await redisClient.set(`user:${user.id}`, JSON.stringify(user), 'EX', 3600);
+
     const response = new ApiResponse(
       201,
       {
@@ -160,6 +161,9 @@ export const uploadProfile = asyncHandler(async (req:MyUserRequest,res: Response
 
     user.profileImage = profile.url;
     await user.save();
+
+    // Cache using Redis
+    await redisClient.set(`user:${user.id}`, JSON.stringify(user), 'EX', 3600);
 
     return res.status(200).json(new ApiResponse(200, user, localeService.translate('PROFILE_UPDATED_SUCCESSFULLY')));
   } catch (error) {
@@ -211,7 +215,33 @@ export const updateProfile = asyncHandler(async (req: MyUserRequest, res: Respon
       return next(new ApiError(404, localeService.translate('UPDATE_USER_FAILED')));
     }
 
+    // Update the cache with the new profile data
+    await redisClient.set(`user:${user.id}`, JSON.stringify(updatedUser[1][0]), 'EX', 3600);
+
     return res.status(200).json(new ApiResponse(200, updatedUser[1][0], localeService.translate('PROFILE_UPDATED_SUCCESSFULLY')));
+  } catch (error) {
+    console.error(error);
+    return next(new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), [error]));
+  }
+});
+
+export const getUserProfile = asyncHandler(async(req:MyUserRequest,res:Response,next:NextFunction)=>{
+  const userId = req.params.id;
+  try {
+    const cachedProfile = await redisClient.get(`user:${userId}`);
+    if(cachedProfile){
+      return res.status(200).json(new ApiResponse(200, JSON.parse(cachedProfile), localeService.translate('USER_PROFILE_FETCHED_SUCCESSFULLY')));
+    }
+
+    const user = await db.User.findByPk(userId,{
+      attributes:['userName','profileImage','profileVisibility'],
+    });
+    if(!user){
+      return next(new ApiError(404, localeService.translate('USER_NOT_FOUND')));
+    }
+
+    await redisClient.set(`user:${userId}`,JSON.stringify(user),'EX',3600);
+    return res.status(200).json(new ApiResponse(200, user, localeService.translate('USER_PROFILE_FETCHED_SUCCESSFULLY')));
   } catch (error) {
     console.error(error);
     return next(new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), [error]));

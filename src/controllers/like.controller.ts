@@ -64,7 +64,7 @@ export const likeComment = asyncHandler(
     }
   
     try {
-      const comment = await db.Post.findByPk(commentId);
+      const comment = await db.Comment.findByPk(commentId);
       if(!comment){
         return next(
           new ApiError(404, localeService.translate('COMMENT_NOT_FOUND'))

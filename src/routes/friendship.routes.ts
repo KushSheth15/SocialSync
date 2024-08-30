@@ -11,7 +11,7 @@ const router = Router();
 
 router.post('/sent-request',verifyToken,sendFriendRequest);
 
-router.post('/accept-request',verifyToken,acceptFriendRequest);
+router.post('/accept-request/:requesterId',verifyToken,acceptFriendRequest);
 
 router.get('/get-friends',verifyToken,getAllFriends);
 

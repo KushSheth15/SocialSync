@@ -11,6 +11,7 @@ import db from '../sequelize-client';
 export interface SharePostModelCreationAttributes {
           userId: string;
           postId?: string;
+          recipientUserId?: string;
       }
       
 export interface SharePostModelAttributes extends SharePostModelCreationAttributes {
@@ -24,6 +25,7 @@ export default class SharePost extends Model<
   declare id: CreationOptional<string>;
   declare userId: string;
   declare postId: string;
+  declare recipientUserId: string;
       
   static associate: (models: typeof db) => void;
 }
@@ -45,6 +47,11 @@ export const sharepost = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequ
         type: DataTypes.UUID,
         allowNull: false,
         field: 'post_id',
+      },
+      recipientUserId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'recipient_user_id',
       },
     },
     {

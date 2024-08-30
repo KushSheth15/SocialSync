@@ -45,7 +45,7 @@ export const like = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequelize
       },
       postId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         field: 'post_id',
       },
       commentId:{

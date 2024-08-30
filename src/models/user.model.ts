@@ -82,7 +82,22 @@ export const user = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequelize
       },
     },
   );
-  User.associate = models => {};
+  User.associate = models => {
+    User.hasMany(models.Post, { foreignKey: 'userId', as: 'posts' });
+    User.hasMany(models.Comment, { foreignKey: 'userId', as: 'comments' });
+    User.belongsToMany(models.User, {
+      through: models.Friendship,
+      as: 'friends',
+      foreignKey: 'requesterId',
+      otherKey: 'receiverId'
+    });
+    User.belongsToMany(models.User, {
+      through: models.Friendship,
+      as: 'receivedRequests',
+      foreignKey: 'receiverId',
+      otherKey: 'requesterId',
+    });
+  };
 
   return User;
 };

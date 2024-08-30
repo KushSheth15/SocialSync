@@ -58,6 +58,8 @@ export const post = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequelize
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Post.associate = models => {
+    Post.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    
     Post.hasMany(models.Comment,{foreignKey:'postId',as:'comments'});
   };
 

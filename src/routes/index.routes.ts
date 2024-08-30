@@ -4,6 +4,7 @@ import commentRoutes from './comment.routes';
 import friendshipRoutes from './friendship.routes';
 import likeRoutes from './like.routes';
 import postRoutes from './post.routes';
+import sharePostRoutes from './share-post.routes';
 import tagRoutes from './tag.routes';
 import userRoutes from './user.routes';
 
@@ -15,5 +16,6 @@ router.use('/comment',commentRoutes);
 router.use('/friendship',friendshipRoutes);
 router.use('/like',likeRoutes);
 router.use('/tags',tagRoutes);
+router.use('/share-post',sharePostRoutes);
 
 export default router;

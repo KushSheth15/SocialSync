@@ -4,7 +4,8 @@ import {
   registerUser,
   loginUser,
   uploadProfile,
-  updateProfile
+  updateProfile,
+  getUserProfile
 } from '../controllers/user.controller';
 import {verifyToken} from '../middlewares/jwt.middleware';
 import upload from '../middlewares/multer.middleware';
@@ -26,6 +27,11 @@ router.patch('/update-profile',
   verifyToken,
   upload.single('profileImage'),
   updateProfile
+);
+
+router.get('/get-profile/:id',
+  verifyToken,
+  getUserProfile
 );
 
 export default router;

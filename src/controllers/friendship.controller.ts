@@ -10,6 +10,7 @@ import ApiResponse from '../utils/api-response';
 import asyncHandler from '../utils/async-handler';
 import i18n from '../utils/intl/i18n-config';
 import { LocaleService } from '../utils/intl/locale-service';
+import redisClient from '../utils/redis-client';
 
 const localeService = new LocaleService(i18n);
 
@@ -48,6 +49,8 @@ export const sendFriendRequest = asyncHandler(
         receiverId:receiverId,
         status:'PENDING',
       });
+
+      await redisClient.del(`friends:${user.id}`);
 
       const response = new ApiResponse(
         201,
@@ -88,7 +91,7 @@ export const acceptFriendRequest = asyncHandler(
     try {
       const friendRequest = await db.Friendship.findOne({
         where:{
-          id:requesterId,
+          requesterId:requesterId,
           receiverId:user.id,
           status:'PENDING',
         }
@@ -102,6 +105,9 @@ export const acceptFriendRequest = asyncHandler(
 
       friendRequest.status = 'ACCEPTED';
       await friendRequest.save();
+
+      await redisClient.del(`friends:${user.id}`);
+      await redisClient.del(`friends:${requesterId}`);
 
       const response = new ApiResponse(
         200,
@@ -133,6 +139,17 @@ export const getAllFriends = asyncHandler(
     }
 
     try {
+      const cachedFriends = await redisClient.get(`friends:${user.id}`);
+
+      if (cachedFriends) {
+        const response = new ApiResponse(
+          200,
+          JSON.parse(cachedFriends),
+          localeService.translate('FRIENDS_FETCHED_SUCCESSFULLY')
+        );
+        return res.status(200).json(response);
+      }
+
       const friendships = await db.Friendship.findAll({
         where:{
           [Op.or]:[
@@ -164,6 +181,9 @@ export const getAllFriends = asyncHandler(
             : { email: requester.email, userName: requester.userName, profileImage: requester.profileImage }
           : null;
       }).filter(friend => friend !== null);
+
+      // Cache the result in Redis
+      await redisClient.set(`friends:${user.id}`, JSON.stringify(formattedFriends), 'EX', 3600);
 
       const response = new ApiResponse(
         200,

@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 
+// eslint-disable-next-line node/no-unpublished-import
 import config from '../config/config';
 
 class Encryption {

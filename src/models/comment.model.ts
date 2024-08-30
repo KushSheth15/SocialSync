@@ -65,7 +65,10 @@ export const comment = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequel
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Comment.associate = models => {};
+  Comment.associate = models => {
+    Comment.belongsTo(models.Post, { foreignKey: 'postId', as: 'post' });
+    Comment.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  };
 
   return Comment;
 };

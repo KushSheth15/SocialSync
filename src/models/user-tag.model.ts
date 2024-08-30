@@ -45,7 +45,7 @@ export const usertag = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequel
       },
       postId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         field: 'post_id',
       },
       commentId:{
