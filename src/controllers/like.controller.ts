@@ -34,6 +34,15 @@ export const likePost = asyncHandler(
         postId
       });
 
+      if (post.userId !== user.id) { 
+        await db.Notification.create({
+          message: `${user.userName} liked your post.`,
+          userId: post.userId,
+          type: 'LIKE',
+          isRead: false
+        });
+      }
+
       const response = new ApiResponse(
         201,
         newLike,

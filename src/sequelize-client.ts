@@ -4,6 +4,8 @@ import { DataTypes, Sequelize } from 'sequelize';
 dotenv.config();
 
 import { accessToken } from './models/access-token.model';
+import { chatroom } from './models/chat-room.model';
+import { chat } from './models/chat.model';
 import { comment } from './models/comment.model';
 import config from './models/config';
 import { friendship } from './models/friendhip.model';
@@ -12,6 +14,7 @@ import { notification } from './models/notification.model';
 import { post } from './models/post.model';
 import { setting } from './models/setting.model';
 import { sharepost } from './models/share-post.model';
+import { userchat } from './models/user-chat.model';
 import { usertag } from './models/user-tag.model';
 import { user } from './models/user.model';
 
@@ -44,6 +47,9 @@ const db = {
   Like:like(sequelize,DataTypes),
   SharePost:sharepost(sequelize,DataTypes),
   UserTag:usertag(sequelize,DataTypes),
+  Chat:chat(sequelize,DataTypes),
+  ChatRoom:chatroom(sequelize,DataTypes),
+  UserChat:userchat(sequelize,DataTypes),
   models: sequelize.models,
 };
 

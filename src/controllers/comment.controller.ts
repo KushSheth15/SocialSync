@@ -41,6 +41,24 @@ export const createComment = asyncHandler(
         postId
       });
 
+      if(post.userId !== user.id){
+        const notification = await db.Notification.create({
+          message:`${user.userName} commented on your post`,
+          userId:post.userId,
+          type:'COMMENT',
+          isRead:false
+        });
+
+        if (!notification) {
+          return next(
+            new ApiError(
+              500,
+              localeService.translate('NOTIFICATION_CREATION_FAILED')
+            )
+          );
+        }
+      }
+      
       const response = new ApiResponse(
         201,
         newComment,

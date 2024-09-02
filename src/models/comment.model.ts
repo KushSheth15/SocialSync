@@ -40,7 +40,6 @@ export const comment = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequel
       },
       content: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       userId: {

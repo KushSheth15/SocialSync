@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import app from './app';
+import {server} from './app';
 import db from './sequelize-client';
 
 const PORT = process.env.PORT;
@@ -11,7 +11,7 @@ const startServer = async () => {
     await db.sequelize.sync({ force: false });
     console.log('Database Connected Successfully ✌');
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running at http://localhost:${PORT} 🚀 `);
     });
   } catch (error) {

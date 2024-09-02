@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import {BASE_ROUTES} from '../constants/api.constant';
 
+import chatRoutes from './chat.routes';
 import commentRoutes from './comment.routes';
 import friendshipRoutes from './friendship.routes';
 import likeRoutes from './like.routes';
@@ -19,5 +20,6 @@ router.use(BASE_ROUTES.FRIENDSHIP,friendshipRoutes);
 router.use(BASE_ROUTES.LIKE,likeRoutes);
 router.use(BASE_ROUTES.TAGS,tagRoutes);
 router.use(BASE_ROUTES.SHARE_POST,sharePostRoutes);
+router.use(BASE_ROUTES.CHAT,chatRoutes);
 
 export default router;

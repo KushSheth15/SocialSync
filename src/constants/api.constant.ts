@@ -41,6 +41,12 @@ export const SHARE_POST_ROUTES = {
   SHARE_POST: '/share-post',
 };
 
+export const CHAT_ROUTES = {
+  CREATE_CHAT_ROOM: '/rooms',
+  GET_CHAT_ROOM_MESSAGE: '/get-message/:roomId',
+  SEND_MESSAGE: '/send-message'
+};
+
 export const BASE_ROUTES = {
   USER:'/user',
   POST:'/post',
@@ -48,5 +54,6 @@ export const BASE_ROUTES = {
   FRIENDSHIP:'/friendship',
   LIKE:'/like',
   TAGS:'/tags',
-  SHARE_POST:'/share-post'
+  SHARE_POST:'/share-post',
+  CHAT:'/chat'
 };

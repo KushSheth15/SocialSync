@@ -50,6 +50,15 @@ export const sendFriendRequest = asyncHandler(
         status:'PENDING',
       });
 
+      if (receiverId !== user.id) {
+        await db.Notification.create({
+          message: `${user.userName} sent you a friend request.`,
+          userId: receiverId,
+          type: 'FRIEND_REQUEST',
+          isRead: false
+        });
+      }
+
       await redisClient.del(`friends:${user.id}`);
 
       const response = new ApiResponse(
@@ -105,6 +114,18 @@ export const acceptFriendRequest = asyncHandler(
 
       friendRequest.status = 'ACCEPTED';
       await friendRequest.save();
+
+      if (requesterId !== user.id) {
+        const notification = await db.Notification.create({
+          message: `${user.userName} accepted your friend request.`,
+          userId: requesterId,
+          type: 'FRIEND_REQUEST',
+          isRead: false
+        });
+
+        // Set the notification as read
+        await notification.update({ isRead: true });
+      }
 
       await redisClient.del(`friends:${user.id}`);
       await redisClient.del(`friends:${requesterId}`);
