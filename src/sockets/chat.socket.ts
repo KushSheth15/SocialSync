@@ -36,9 +36,11 @@ export default function ChatSocket(io:Server){
         isSeen:false
       });
 
-      if (data.senderId !== data.receiverId) {
+      const sender = await db.User.findByPk(data.senderId);
+
+      if (sender && data.senderId !== data.receiverId) {
         await db.Notification.create({
-          message: `You have received a new message from ${data.senderId}`,
+          message: `You have received a new message from ${sender.userName}`,
           userId: data.receiverId,
           type: 'MESSAGE',
           isRead: false
@@ -49,18 +51,21 @@ export default function ChatSocket(io:Server){
  
     });
 
-    socket.on('messageSeen',async (messageId:string)=>{
-      try {
-        const message = await db.Chat.findOne({where:{id:messageId}});
-        if(message){
-          message.isSeen = true;
-          await message.save();
-          console.log(`Message ${messageId} marked as seen`);
+    socket.on('messageSeen', 
+      async ({ messageId, roomId }: { messageId: string; roomId: string }) => {
+        try {
+          const message = await db.Chat.findOne({ where: { id: messageId } });
+          if (message && message.isSeen === false) {
+            message.isSeen = true;
+            await message.save();
+            console.log(`Message ${messageId} marked as seen`);
+  
+            io.to(roomId).emit('messageSeen', { messageId });
+          }
+        } catch (error) {
+          console.error('Error marking message as seen:', error);
         }
-      } catch (error) {
-        console.error('Error marking message as seen:', error);
-      }
-    });
+      });
 
     socket.on('disconnect',()=>{
       console.log('Client disconnected', socket.id);

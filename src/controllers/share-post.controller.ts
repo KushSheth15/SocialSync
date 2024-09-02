@@ -10,6 +10,13 @@ import { LocaleService } from '../utils/intl/locale-service';
 
 const localeService = new LocaleService(i18n);
 
+/**
+ * Shares a post with a recipient user.
+ * @param req - The request object containing user information, postId, and recipientUserId in the body.
+ * @param res - The response object.
+ * @param next - The next middleware function.
+ */
+
 export const sharePost = asyncHandler(
   async (req:MyUserRequest,res:Response,next:NextFunction)=>{
     const user = req.user;

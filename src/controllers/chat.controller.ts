@@ -12,6 +12,15 @@ import { LocaleService } from '../utils/intl/locale-service';
 
 const localeService = new LocaleService(i18n);
 
+/**
+ * Creates a new chat room.
+ * @param {MyUserRequest} req - The request object containing user and chat room data.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if user is not found or required fields are missing.
+ * @returns {Promise<void>} Sends a response with the created chat room data.
+ */
+
 export const createChatRoom = asyncHandler(
   async (req: MyUserRequest, res: Response, next: NextFunction) => {
     const user = req.user;
@@ -61,6 +70,15 @@ export const createChatRoom = asyncHandler(
   }
 );
 
+/**
+ * Retrieves messages for a specific chat room.
+ * @param {MyUserRequest} req - The request object containing the chat room ID parameter.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if user is not found or chat room ID is missing.
+ * @returns {Promise<void>} Sends a response with the retrieved messages.
+ */
+
 export const getChatRoomMessage = asyncHandler(
   async (req:MyUserRequest,res:Response,next:NextFunction)=>{
     const user = req.user;
@@ -102,6 +120,15 @@ export const getChatRoomMessage = asyncHandler(
     }
   }
 );
+
+/**
+ * Sends a message to a chat room.
+ * @param {MyUserRequest} req - The request object containing the chat room ID, message, and receiver ID.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if user is not found or required fields are missing.
+ * @returns {Promise<void>} Sends a response with the sent message data.
+ */
 
 export const sendMessage = asyncHandler(
   async (req:MyUserRequest, res:Response, next:NextFunction)=>{

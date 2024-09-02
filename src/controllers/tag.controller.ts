@@ -10,6 +10,13 @@ import { LocaleService } from '../utils/intl/locale-service';
 
 const localeService = new LocaleService(i18n);
 
+/**
+ * Tags a user in a post.
+ * @param req - The request object, including user information, postId, and taggedUserId in the body.
+ * @param res - The response object.
+ * @param next - The next middleware function.
+ */
+
 export const tagUserInPost = asyncHandler(
   async(req:MyUserRequest,res:Response,next:NextFunction)=>{
     const user = req.user;

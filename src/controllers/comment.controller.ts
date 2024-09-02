@@ -10,6 +10,15 @@ import { LocaleService } from '../utils/intl/locale-service';
 
 const localeService = new LocaleService(i18n);
 
+/**
+ * Creates a new comment on a post.
+ * @param {MyUserRequest} req - The request object containing user and comment data.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if user is not found, post is not found, or notification fails.
+ * @returns {Promise<void>} Sends a response with the newly created comment.
+ */
+
 export const createComment = asyncHandler(
   async(req:MyUserRequest,res:Response,next:NextFunction)=>{
     const user = req.user;
@@ -77,6 +86,15 @@ export const createComment = asyncHandler(
     }
   });
 
+/**
+ * Retrieves comments for a specific post.
+ * @param {MyUserRequest} req - The request object containing the post ID parameter.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if post is not found.
+ * @returns {Promise<void>} Sends a response with the post content and comments.
+ */
+
 export const getCommentByPost = asyncHandler(
   async (req:MyUserRequest,res:Response,next:NextFunction)=>{
     const {postId} = req.params;
@@ -115,6 +133,15 @@ export const getCommentByPost = asyncHandler(
       );
     }
   });
+
+/**
+ * Updates an existing comment.
+ * @param {MyUserRequest} req - The request object containing the comment ID and updated content.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if user is not found, comment is not found, or content is missing.
+ * @returns {Promise<void>} Sends a response with the updated comment.
+ */
 
 export const updateComment = asyncHandler(
   async (req:MyUserRequest,res:Response,next:NextFunction)=>{
@@ -161,6 +188,15 @@ export const updateComment = asyncHandler(
       );
     }
   });
+
+/**
+ * Deletes a comment.
+ * @param {MyUserRequest} req - The request object containing the comment ID.
+ * @param {Response} res - The response object used to send the response.
+ * @param {NextFunction} next - The middleware function to pass control to the next handler.
+ * @throws {ApiError} Throws an error if user is not found or comment is not found.
+ * @returns {Promise<void>} Sends a response indicating successful deletion.
+ */
 
 export const deleteComment = asyncHandler(
   async (req:MyUserRequest,res:Response,next:NextFunction)=>{
