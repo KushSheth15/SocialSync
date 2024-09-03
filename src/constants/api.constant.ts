@@ -47,6 +47,10 @@ export const CHAT_ROUTES = {
   SEND_MESSAGE: '/send-message'
 };
 
+export const SETTING_ROUTES = {
+  UPDATE_SETTING: '/notifications',
+};
+
 export const BASE_ROUTES = {
   USER:'/user',
   POST:'/post',
@@ -55,5 +59,6 @@ export const BASE_ROUTES = {
   LIKE:'/like',
   TAGS:'/tags',
   SHARE_POST:'/share-post',
-  CHAT:'/chat'
+  CHAT:'/chat',
+  SETTING:'/setting',
 };

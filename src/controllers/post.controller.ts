@@ -25,6 +25,10 @@ export const createPost = asyncHandler(async (req: MyUserRequest, res: Response,
     );
   }
 
+  if (!content && !captions) {
+    return next(new ApiError(400, localeService.translate('CONTENT_OR_CAPTION_REQUIRED')));
+  }
+
   try {
     await redisClient.del('allPosts');
 

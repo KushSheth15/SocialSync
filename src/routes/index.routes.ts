@@ -7,6 +7,7 @@ import commentRoutes from './comment.routes';
 import friendshipRoutes from './friendship.routes';
 import likeRoutes from './like.routes';
 import postRoutes from './post.routes';
+import settingRoutes from './setting.routes'; 
 import sharePostRoutes from './share-post.routes';
 import tagRoutes from './tag.routes';
 import userRoutes from './user.routes';
@@ -21,5 +22,6 @@ router.use(BASE_ROUTES.LIKE,likeRoutes);
 router.use(BASE_ROUTES.TAGS,tagRoutes);
 router.use(BASE_ROUTES.SHARE_POST,sharePostRoutes);
 router.use(BASE_ROUTES.CHAT,chatRoutes);
+router.use(BASE_ROUTES.SETTING,settingRoutes);
 
 export default router;

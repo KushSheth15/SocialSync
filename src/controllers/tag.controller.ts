@@ -35,6 +35,25 @@ export const tagUserInPost = asyncHandler(
     }
 
     try {
+      const taggedUser = await db.User.findByPk(taggedUserId);
+      if (!taggedUser) {
+        return next(
+          new ApiError(404, localeService.translate('TAGGED_USER_NOT_FOUND')));
+      }
+
+      // Check if the user is already tagged in this post
+      const existingTag = await db.UserTag.findOne({
+        where: {
+          postId,
+          userId: taggedUserId,
+        },
+      });
+
+      if (existingTag) {
+        return next(
+          new ApiError(409, localeService.translate('USER_ALREADY_TAGGED')));
+      }
+
       const userTag = await db.UserTag.create({
         postId,
         userId:taggedUserId

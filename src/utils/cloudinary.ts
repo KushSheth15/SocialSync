@@ -28,15 +28,34 @@ export interface CloudinaryUploadResponse {
     original_filename: string;
 }
 
+const getResourceType = (filePath: string): 'image' | 'video' => {
+  const ext = path.extname(filePath).toLowerCase();
+  if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) {
+    return 'image';
+  } else if (['.mp4', '.mov', '.avi'].includes(ext)) {
+    return 'video';
+  } else {
+    throw new Error('Unsupported file type');
+  }
+};
+
 const uploadOnCloudinary = async (localFilePath: string): Promise<CloudinaryUploadResponse | null> => {
   if (!localFilePath) {
     console.warn('No file path provided for upload.');
     return null;
   }
 
+  let resourceType: 'image' | 'video';
+  try {
+    resourceType = getResourceType(localFilePath);
+  } catch (error) {
+    console.error('Error determining resource type:', (error as Error).message);
+    return null;
+  }
+
   try {
     const response = await cloudinary.uploader.upload(localFilePath, {
-      resourceType: 'auto',
+      resource_type: resourceType
     });
 
     return response as CloudinaryUploadResponse;
