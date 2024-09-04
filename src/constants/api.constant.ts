@@ -38,7 +38,7 @@ export const TAG_ROUTES = {
 };
 
 export const SHARE_POST_ROUTES = {
-  SHARE_POST: '/share-post',
+  SHARE_POST: '/share',
 };
 
 export const CHAT_ROUTES = {

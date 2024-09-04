@@ -37,5 +37,6 @@
 	"MESSAGE_SENT_SUCCESSFULLY": "Your message has been sent successfully.",
 	"MESSAGES_RETRIEVED_SUCCESSFULLY": "Messages have been retrieved successfully.",
 	"CONTENT_UPLOAD_FAILED": "Failed to upload content. Please try again.",
-	"NOTIFICATION_SETTING_UPDATED": "Notification settings updated successfully."
+	"NOTIFICATION_SETTING_UPDATED": "Notification settings updated successfully.",
+	"POST_SHARED_SUCCESSFULLY": "Post shared successfully"
 }

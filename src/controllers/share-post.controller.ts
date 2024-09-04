@@ -44,6 +44,27 @@ export const sharePost = asyncHandler(
         );
       }
 
+      if (recipientUser.profileVisibility === 'PRIVATE') {
+        return next(
+          new ApiError(403, localeService.translate('USER_PROFILE_PRIVATE'))
+        );
+      }
+
+      if (recipientUser.profileVisibility === 'FRIENDS_ONLY') {
+        const isFriend = await db.Friendship.findOne({
+          where: {
+            requesterId: user.id,
+            receiverId: recipientUserId
+          }
+        });
+
+        if (!isFriend) {
+          return next(
+            new ApiError(403, localeService.translate('USER_NOT_FRIENDS'))
+          );
+        }
+      }
+
       const sharePost = await db.SharePost.create({
         userId: user.id,
         postId,
