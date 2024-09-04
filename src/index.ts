@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import {server} from './app';
+import logger from './logger';
 import db from './sequelize-client';
 
 const PORT = process.env.PORT;
@@ -9,13 +10,13 @@ const PORT = process.env.PORT;
 const startServer = async () => {
   try {
     await db.sequelize.sync({ force: false });
-    console.log('Database Connected Successfully ✌');
+    logger.info('Database Connected Successfully ✌');
 
     server.listen(PORT, () => {
-      console.log(`Server is running at http://localhost:${PORT} 🚀 `);
+      logger.info(`Server is running at http://localhost:${PORT} 🚀 `);
     });
   } catch (error) {
-    console.error('Unable to start server : ', error);
+    logger.error('Unable to start server : ', error);
   }
 };
 

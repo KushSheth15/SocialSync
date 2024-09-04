@@ -53,7 +53,10 @@ export const chatroom = (sequelize: Sequelize.Sequelize, DataTypes: typeof Seque
   );
   
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ChatRoom.associate = models => {};
+  ChatRoom.associate = models => {
+    ChatRoom.hasMany(models.UserChat,{foreignKey:'roomId',as:'userchat'});
+    ChatRoom.hasMany(models.Chat,{foreignKey:'roomId',as:'chat'});
+  };
   
   return ChatRoom;
 };

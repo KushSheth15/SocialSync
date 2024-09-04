@@ -1,9 +1,8 @@
+/* eslint-disable max-len */
 import { Server,Socket } from 'socket.io';
 
-import {v4 as UUIDV4} from 'uuid';
-
+import logger from '../logger';
 import db from '../sequelize-client';
-
 interface JoinRoomData {
     roomId:string;
     userId:string;
@@ -18,38 +17,78 @@ interface MessageData{
 
 export default function ChatSocket(io:Server){
   io.on('connection',(socket:Socket)=>{
-    console.log('New client connected', socket.id);
+    logger.info('New client connected', socket.id);
 
     socket.on('joinRoom',async (data:JoinRoomData)=>{
-      socket.join(data.roomId);
-      console.log(`${data.userId} Joined Room ${data.roomId}`);
-    });
 
-    socket.on('sendMessage',async (data:MessageData)=>{
-      const newMessage = await db.Chat.create({
-        id: UUIDV4(),
-        senderId: data.senderId,
-        receiverId: data.receiverId,
-        roomId: data.roomId,
-        message: data.message,
-        sendTime:new Date(),
-        isSeen:false
+      const isUserInRoom = await db.UserChat.findOne({
+        where:{roomId:data.roomId,userId:data.userId},
       });
 
-      const sender = await db.User.findByPk(data.senderId);
-
-      if (sender && data.senderId !== data.receiverId) {
-        await db.Notification.create({
-          message: `You have received a new message from ${sender.userName}`,
-          userId: data.receiverId,
-          type: 'MESSAGE',
-          isRead: false
-        });
+      if(isUserInRoom){
+        socket.join(data.roomId);
+        logger.info(`${data.userId} joined Room ${data.roomId}`);
       }
-
-      io.emit('receiveMessage',newMessage);
- 
+      else{
+        logger.info(`${data.userId} is not part of Room ${data.roomId}`);
+        socket.emit('errorMessage','You are not part of this room');
+      }
     });
+
+    socket.on('sendMessage', async (data: MessageData) => {
+      try {
+        const isSenderInRoom = await db.UserChat.findOne({
+          where: { roomId: data.roomId, userId: data.senderId },
+        });
+    
+        // Ensure the sender is in the room before proceeding
+        if (!isSenderInRoom) {
+          logger.info('Message not sent. Sender is not part of the room.');
+          socket.emit('errorMessage', 'Sender must be part of the room.');
+          return;
+        }
+    
+        // Check if it's a one-to-one chat or a group chat
+        if (data.receiverId) {
+          // One-to-One Chat
+          const isReceiverInRoom = await db.UserChat.findOne({
+            where: { roomId: data.roomId, userId: data.receiverId },
+          });
+    
+          if (isReceiverInRoom) {
+            const newMessage = await db.Chat.create({
+              senderId: data.senderId,
+              receiverId: data.receiverId,
+              roomId: data.roomId,
+              message: data.message,
+              sendTime: new Date(),
+              isSeen: false,
+            });
+    
+            // Emit the message to both the sender and the receiver
+            io.emit('receiveMessage', newMessage);
+          } else {
+            logger.info('Message not sent. Receiver is not part of the room.');
+            socket.emit('errorMessage', 'Receiver must be part of the room.');
+          }
+        } else {
+          // Group Chat: Broadcast to all members in the room
+          const newMessage = await db.Chat.create({
+            senderId: data.senderId,
+            roomId: data.roomId,
+            message: data.message,
+            sendTime: new Date(),
+            isSeen: false,
+          });
+    
+          // Notify all users in the room
+          io.emit('receiveMessage', newMessage);
+        }
+      } catch (error) {
+        console.error('Error in sendMessage:', error);
+        socket.emit('errorMessage', 'An error occurred while sending the message.');
+      }
+    });        
 
     socket.on('messageSeen', 
       async ({ messageId, roomId }: { messageId: string; roomId: string }) => {
@@ -63,12 +102,12 @@ export default function ChatSocket(io:Server){
             io.to(roomId).emit('messageSeen', { messageId });
           }
         } catch (error) {
-          console.error('Error marking message as seen:', error);
+          logger.error('Error marking message as seen:', error);
         }
       });
 
     socket.on('disconnect',()=>{
-      console.log('Client disconnected', socket.id);
+      logger.info('Client disconnected', socket.id);
     });
   });
 }

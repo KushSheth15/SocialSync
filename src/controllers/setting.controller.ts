@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import { Response, NextFunction } from 'express';
 
+import logger from '../logger';
 import db from '../sequelize-client';
 import { MyUserRequest } from '../types/request-interface';
 import ApiError from '../utils/api-error';
@@ -56,7 +57,7 @@ export const updateNotificationSetting = asyncHandler(
 
       res.status(200).json(response);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return next(
         new ApiError(
           500,

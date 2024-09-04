@@ -52,7 +52,10 @@ export const userchat = (sequelize: Sequelize.Sequelize, DataTypes: typeof Seque
   );
     
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  UserChat.associate = models => {};
+  UserChat.associate = models => {
+    UserChat.belongsTo(models.ChatRoom,{foreignKey:'roomId',as:'chatRoom'});
+    UserChat.belongsTo(models.User,{foreignKey:'userId',as:'user'});
+  };
     
   return UserChat;
 };

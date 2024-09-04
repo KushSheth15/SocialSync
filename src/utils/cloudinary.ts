@@ -7,6 +7,8 @@ import path from 'path';
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 
+import logger from '../logger';
+
 dotenv.config();
 
 cloudinary.config({
@@ -41,7 +43,7 @@ const getResourceType = (filePath: string): 'image' | 'video' => {
 
 const uploadOnCloudinary = async (localFilePath: string): Promise<CloudinaryUploadResponse | null> => {
   if (!localFilePath) {
-    console.warn('No file path provided for upload.');
+    logger.warn('No file path provided for upload.');
     return null;
   }
 
@@ -49,7 +51,7 @@ const uploadOnCloudinary = async (localFilePath: string): Promise<CloudinaryUplo
   try {
     resourceType = getResourceType(localFilePath);
   } catch (error) {
-    console.error('Error determining resource type:', (error as Error).message);
+    logger.error('Error determining resource type:', (error as Error).message);
     return null;
   }
 
@@ -60,15 +62,15 @@ const uploadOnCloudinary = async (localFilePath: string): Promise<CloudinaryUplo
 
     return response as CloudinaryUploadResponse;
   } catch (error) {
-    console.error('Error uploading file:', (error as Error).message);
+    logger.error('Error uploading file:', (error as Error).message);
     return null;
   } finally {
     if (fs.existsSync(localFilePath)) {
       fs.unlink(localFilePath, unlinkError => {
         if (unlinkError) {
-          console.error('Error deleting local file:', unlinkError.message);
+          logger.error('Error deleting local file:', unlinkError.message);
         } else {
-          console.log('Local file deleted successfully:', path.basename(localFilePath));
+          logger.info('Local file deleted successfully:', path.basename(localFilePath));
         }
       });
     }

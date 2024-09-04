@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { MyUserRequest } from 'request-interface';
 import { Op } from 'sequelize';
 
+import logger from '../logger';
 import db from '../sequelize-client';
 import ApiError from '../utils/api-error';
 import ApiResponse from '../utils/api-response';
@@ -46,7 +47,7 @@ export const registerUser = asyncHandler(
       const response = new ApiResponse(201, newUser, localeService.translate('ACCOUNT_CREATED_SUCCESSFULLY'));
       res.status(201).json(response);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       return next(new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), [error]));
     }
   },
@@ -137,7 +138,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response, next: 
 
     res.status(200).json(response);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return next(new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), [error]));
   }
 });
@@ -167,7 +168,7 @@ export const uploadProfile = asyncHandler(async (req:MyUserRequest,res: Response
 
     return res.status(200).json(new ApiResponse(200, user, localeService.translate('PROFILE_UPDATED_SUCCESSFULLY')));
   } catch (error) {
-    console.error('Error in uploadProfile:', error);
+    logger.error('Error in uploadProfile:', error);
     return next(new ApiError(500,  localeService.translate('INTERNAL_SERVER_ERROR'), [error]));
   }
   
@@ -220,7 +221,7 @@ export const updateProfile = asyncHandler(async (req: MyUserRequest, res: Respon
 
     return res.status(200).json(new ApiResponse(200, updatedUser[1][0], localeService.translate('PROFILE_UPDATED_SUCCESSFULLY')));
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return next(new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), [error]));
   }
 });
@@ -243,7 +244,7 @@ export const getUserProfile = asyncHandler(async(req:MyUserRequest,res:Response,
     await redisClient.set(`user:${userId}`,JSON.stringify(user),'EX',3600);
     return res.status(200).json(new ApiResponse(200, user, localeService.translate('USER_PROFILE_FETCHED_SUCCESSFULLY')));
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return next(new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), [error]));
   }
 });

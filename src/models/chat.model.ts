@@ -24,7 +24,7 @@ export interface ChatModelAttributes extends ChatModelCreationAttributes {
 export default class Chat extends Model<InferAttributes<Chat>, InferCreationAttributes<Chat>> {
   declare id: CreationOptional<string>;
   declare senderId: string;
-  declare receiverId: string;
+  declare receiverId?: string;
   declare message: string;
   declare roomId: string;
   declare sendTime: CreationOptional<Date>;
@@ -78,8 +78,11 @@ export const chat = (sequelize: Sequelize.Sequelize, DataTypes: typeof Sequelize
     },
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Chat.associate = models => {};
+  Chat.associate = models => {
+    Chat.belongsTo(models.ChatRoom,{foreignKey:'roomId',as:'chatRoom'});
+    Chat.belongsTo(models.User,{foreignKey:'senderId',as:'sender'});
+    Chat.belongsTo(models.User,{foreignKey:'receiverId',as:'receiver'});
+  };
 
   return Chat;
 };

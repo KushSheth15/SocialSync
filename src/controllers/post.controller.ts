@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import {Response, NextFunction } from 'express';
 
+import logger from '../logger';
 import db from '../sequelize-client';
 import { MyUserRequest } from '../types/request-interface';
 import ApiError from '../utils/api-error';
@@ -57,7 +58,7 @@ export const createPost = asyncHandler(async (req: MyUserRequest, res: Response,
     );
     res.status(201).json(response);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return next(
       new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), 
         [error]
@@ -88,7 +89,7 @@ export const getAllPost = asyncHandler(async (req:MyUserRequest,res:Response,nex
     const response = new ApiResponse(200,getPost,localeService.translate('POST_RETRIVED_SUCCESSFULLY'));
     return res.status(200).json(response);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return next(
       new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), 
         [error]
@@ -125,7 +126,7 @@ export const getPostById = asyncHandler(async (req:MyUserRequest,res:Response,ne
     const response = new ApiResponse(200, post, localeService.translate('POST_RETRIVED_SUCCESSFULLY'));
     return res.status(200).json(response);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return next(
       new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), 
         [error]
@@ -165,7 +166,7 @@ export const updatePost = asyncHandler(async (req:MyUserRequest,res:Response,nex
     const response = new ApiResponse(200, post, localeService.translate('POST_UPDATED_SUCCESSFULLY'));
     return res.status(200).json(response);
   } catch(error){
-    console.error(error);
+    logger.error(error);
     return next(
       new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), 
         [error]
@@ -206,7 +207,7 @@ export const deletePost = asyncHandler(async (req:MyUserRequest,res:Response,nex
     const response = new ApiResponse(200, null, localeService.translate('POST_DELETE_SUCCESSFULLY'));
     return res.status(200).json(response);
   } catch(error){
-    console.error(error);
+    logger.error(error);
     return next(
       new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), 
         [error]
@@ -270,7 +271,7 @@ export const viewPost = asyncHandler(async (req:MyUserRequest,res:Response,next:
 
     return res.status(403).json({ message: localeService.translate('ACCESS_DENIED') });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     return next(
       new ApiError(500, localeService.translate('INTERNAL_SERVER_ERROR'), 
         [error]

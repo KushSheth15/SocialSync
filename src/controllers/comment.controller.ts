@@ -1,5 +1,6 @@
 import {Response, NextFunction } from 'express';
 
+import logger from '../logger';
 import db from '../sequelize-client';
 import { MyUserRequest } from '../types/request-interface';
 import ApiError from '../utils/api-error';
@@ -75,7 +76,7 @@ export const createComment = asyncHandler(
       );
       res.status(201).json(response);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return next(
         new ApiError(
           500, 
@@ -123,7 +124,7 @@ export const getCommentByPost = asyncHandler(
       );
       res.status(200).json(response);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return next(
         new ApiError(
           500, 
@@ -178,7 +179,7 @@ export const updateComment = asyncHandler(
       );
       res.status(200).json(response);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return next(
         new ApiError(
           500, 
@@ -225,7 +226,7 @@ export const deleteComment = asyncHandler(
       );
       res.status(200).json(response);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return next(
         new ApiError(
           500, 
