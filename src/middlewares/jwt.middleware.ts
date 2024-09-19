@@ -6,10 +6,6 @@ import {Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 import config from '../config/config';
-// import {
-//   ERROR_MESSAGES,
-// } from '../constants/messages.constant';
-// import User from '../models/user.model';
 import db from '../sequelize-client';
 import { MyUserRequest } from '../types/request-interface';
 import ApiError from '../utils/api-error';
